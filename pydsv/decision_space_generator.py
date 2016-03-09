@@ -88,7 +88,7 @@ class DecisionSpaceGenerator:
                 
         return ds, x_grid, y_grid
         
-    def polyfit_ds(self, data, n_cells=25, gamma=1.0):
+    def polyfit_ds(self, data, n_cells=25, gamma=1.0, retCoeff=False):
         # generate decision space surface and approximate it by polynomial 
         # (assuming x and y are independent)
         # TODO: do this for the cell-wise averaging
@@ -96,11 +96,13 @@ class DecisionSpaceGenerator:
         ds, x_grid, y_grid, u_x, u_y = self.generate_ds(data, n_cells, gamma, return_u_xy=True)
         
         p_x = np.polyfit((x_grid[:-1]+x_grid[1:])/2.0, u_x, 4)
-        p_y = np.polyfit((y_grid[:-1]+y_grid[1:])/2.0, u_y, 4)
+        p_y = np.polyfit((y_grid[:-1]+y_grid[1:])/2.0, u_y, 3)
         u_x_fit = np.poly1d(p_x)
         u_y_fit = np.poly1d(p_y)
         
         ds_poly = np.tile(u_x_fit((x_grid[:-1]+x_grid[1:])/2.0), (n_cells, 1)) + \
             np.tile(u_y_fit((y_grid[:-1]+y_grid[1:])/2.0), (n_cells, 1)).transpose()        
-        
-        return ds, ds_poly, x_grid, y_grid
+        if retCoeff:
+            return p_x, p_y, ds, ds_poly, x_grid, y_grid
+        else:
+            return ds, ds_poly, x_grid, y_grid

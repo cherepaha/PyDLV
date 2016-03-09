@@ -25,7 +25,9 @@ data = reader.read_data()
 subj_ids, proc_data = reader.preprocess_data(data, exp_type, rewards_sum, trial_nos)
 proc_data = reader.append_derivatives(proc_data)
 
-ds, ds_poly, x_grid, y_grid = dsg.polyfit_ds(proc_data)
+p_x, p_y, ds, ds_poly, x_grid, y_grid = dsg.polyfit_ds(proc_data, retCoeff=True)
+
+#print(p_x, p_y)
 
 plotter = ds_plotter.DSPlotter()
 plotter.plot_surface(x_grid, y_grid, ds, cmap=cm.spring)

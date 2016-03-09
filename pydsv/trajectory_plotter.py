@@ -15,7 +15,8 @@ class TrajectoryPlotter:
     lw=2.0
     
     def __init__(self):
-        plt.ioff()
+#        plt.ioff()
+        plt.ion()
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111)
         self.set_axis_params()     
@@ -36,8 +37,9 @@ class TrajectoryPlotter:
         
     def plot_subject_trajectories(self, data, subj_id):
         for trial_no, trajectory in data.loc[subj_id].groupby(level='trial_no'):
-            self.ax.plot(trajectory.x.values, trajectory.y.values, marker='o')
+            self.ax.plot(trajectory.x.values, trajectory.y.values, marker='o', label=trial_no)
         self.ax.set_title('Participant '+ str(subj_id), fontsize=self.axisLabelFontSize)
+        self.ax.legend()
 #        self.add_grid()
         plt.tight_layout()
         
