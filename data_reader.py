@@ -5,8 +5,24 @@ import numpy as np
 class DataReader:
     n_steps = 50
     lowHighTrials = [12, 15, 25]
+
+    def get_processed_data(self):
+        '''
+        The input trajectories are assumed to be time-normalised, augmented by mouse x- and 
+        y-velocities, and presented in a 'long' dataframe format. It should contain the following 
+        columns (in any order): subj_id, trial_no, t, x, y, vx, vy, chng_mind, xflip_count.
+        t, x, y, vx and vy columns are: time, mouse x- and y- coordinates, mouse x- and y- velocities
+        chng_mind is Boolean column indicating whether the trajectory has change-of-mind or not
+        xflip_count indicates the number of changes of sign of mouse x-velocity
+        '''
+        data = pd.read_csv('../../data/processed_data_high_low.csv', sep=',', header=0)
+        data.set_index(['subj_id', 'trial_no'], inplace=True)
+        data = data[(data.xflip_count < 4) & (data.chng_mind == False)]    
+        data['high_chosen'] = data.outcome != 5
     
-    def read_data(self):
+        return data
+    
+    def read_raw_data(self):
         dynamicsPath = '../../data/pod_traj_inc3.txt'
         choicesPath = '../../data/pod_choice_inc3.txt'
         
