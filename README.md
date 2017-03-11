@@ -7,6 +7,6 @@ fit_dl_to_data.py demonstrates how to fit decision landscape parameters to the m
 
 compare_dlv_two_subjects.py shows how to read the parameters from the csv file and visualise the decision lanscape in 3d using matplotlib.
 
-Email me if you'd like to get some example data to see the scripts in action!
+To see the scripts in action, download the data of O'Hora et al (2013) [here](http://doi.org/10.17605/OSF.IO/AHPV6).
 
 The project is currently in active development, stay tuned for updates!
