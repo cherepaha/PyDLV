@@ -1,12 +1,24 @@
-# [PyDSV - decision landscape visualisation toolbox](http://www.ohoralab.com/)
-Decision landscapes are visually rich representations of decision making data. Any experimental data on mouse/hand tracking can potentially benefit from decision landscape visualisations. We build the project up on [numpy](https://sourceforge.net/projects/numpy/)/[scipy](https://github.com/scipy/scipy) framework and use [pandas](https://github.com/pydata/pandas) to handle data manipulation. Another key dependencies are [matplotlib](https://github.com/matplotlib/matplotlib) and [seaborn](https://github.com/mwaskom/seaborn).
+# [PyDLV - decision landscape visualisation toolbox](https://github.com/cherepaha/PyDLV)
+Decision landscapes are visually rich representations of decision making data. Any experimental data on mouse/hand tracking can potentially benefit from decision landscape visualisations (DLV). 
 
-![alt text](https://github.com/cherepaha/PyDSV/blob/master/9276_9424.png "Example landscape visualisation")
+Dependencies
+-------------
+PyDLV is currently developed in Python 2.7 using the [numpy](https://sourceforge.net/projects/numpy/)/[scipy](https://github.com/scipy/scipy) framework, [pandas](https://github.com/pydata/pandas) is used for data manipulation. Another key dependencies are [matplotlib](https://github.com/matplotlib/matplotlib) and [seaborn](https://github.com/mwaskom/seaborn). The plans are to migrate to Python 3.6 by the end of 2017.
 
-fit_dl_to_data.py demonstrates how to fit decision landscape parameters to the mouse trajectory data and save the fitted parameters to the csv file. 
+Installation
+------------
+To install, clone the repository and run
 
-compare_dlv_two_subjects.py shows how to read the parameters from the csv file and visualise the decision lanscape in 3d using matplotlib.
+    python setup.py install
 
-To see the scripts in action, download the data of O'Hora et al (2013) [here](http://doi.org/10.17605/OSF.IO/AHPV6).
+How to use
+------------
+To see DLV's in action, first download the data of O'Hora et al (2013) [here](http://doi.org/10.17605/OSF.IO/AHPV6). Then follow the tutorial notebook (demos/dlv_tutorial.ipynb). Tutorial and other demos are not installed along with the module, so you have to download them separately.
+
+Place the ipynb file somewhere along the downloaded data, and open the notebook. Adjust the path to the data file, and have fun! 
+
+If you're not familiar with Jupyter Notebooks, here is a good [starting guide](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/index.html) Also, [nbopen](https://github.com/takluyver/nbopen) is much recommended! 
+
+When you're done with tutorial, you can use the scripts in the demos directory as examples. You may also find useful the notebook `rsos_figures.ipynb`, which generates almost all the figures from the paper (with the exception of Figure 3, which was generated manually in PowerPoint).
 
 The project is currently in active development, stay tuned for updates!
