@@ -1,10 +1,8 @@
 import pandas as pd
 import numpy as np
-from scipy import integrate
-from scipy.interpolate import interp2d
 import scipy as sp
 
-class DecisionLandscapeGenerator:
+class DLGenerator:
     '''
     This class is responsible for generating decision landScape parameters using the experimental
     trajectories. The two methods, fit_ds_single_traj and fit_ds_mult_traj, provide external 
@@ -12,40 +10,42 @@ class DecisionLandscapeGenerator:
     algorithms available in scipy.opimize. The method get_model_dl is used for getting 
     visualisation-ready data.
     '''
-    n_cells = 25       
-    x_lim = [-1.3, 1.3]
-    y_lim = [0.0, 1.3]
+    n_cells = 25
     
-    def __init__(self, model):
+    def __init__(self, model, x_lim = [-1.1, 1.1], y_lim = [0.0, 1.1]):
         self.model = model
-        self.baseline_coeffs = model.get_baseline_coeffs()
-        self.param_boundaries = model.get_parameter_bounds()
-        self.param_names = model.get_param_names()        
+        self.x_lim = x_lim
+        self.y_lim = y_lim
+        self.baseline_coeffs = self.model.get_baseline_params()
+        self.param_boundaries = self.model.get_parameter_bounds()
+        self.param_names = self.model.get_param_names()        
 
-    def fit_dl_single_traj(self, trajectory, model, method=6):
+    def fit_dl_single_traj(self, trajectory, method=9):
         '''
         trajectory: long dataframe containing t, x, y, vx, vy for each time step       
         '''
-        print(trajectory.iloc[1].name)
-        f = lambda coeffs: model.model_error(coeffs, trajectory)
-        f_jac = lambda coeffs: model.model_error_jac(coeffs, trajectory)
+#        print(trajectory.iloc[1].name)
+        f = lambda coeffs: self.model.model_error(coeffs, trajectory)
+        f_jac = lambda coeffs: self.model.model_error_jac(coeffs, trajectory)
             
         return self.dlg_minimize(f, f_jac, method)
     
-    def fit_dl_mult_traj(self, trajectories, model, method=6):
+    def fit_dl_mult_traj(self, trajectories, method=9):
         '''
         trajectories: long dataframe containing t, x, y, vx, vy for each time step 
         for each trajectory
         '''
-        f = lambda coeffs: model.model_error_multiple_traj(coeffs, trajectories)
-        f_jac = lambda coeffs: model.model_error_jac_multiple_traj(coeffs, trajectories)
+#        print(trajectories.iloc[1].name)
+        f = lambda coeffs: self.model.model_error_multiple_traj(coeffs, trajectories)
+        f_jac = lambda coeffs: self.model.model_error_jac_multiple_traj(coeffs, trajectories)
                     
         return self.dlg_minimize(f, f_jac, method)
     
-    def dlg_minimize(self, f, f_jac=[], method=[6]):
+    def dlg_minimize(self, f, f_jac=[], method=9):
         '''
         Wrapper of scipy.optimize algorithms. Accepts cost function and its jacobian and returns 
-        the dataframe with optimization results. Jacobian is required for methods 3 to 9, and 12
+        the dataframe with optimization results. Jacobian is required for methods 3 to 9, and 12.
+        Recommended methods are L-BFGS-B (6) and SLSQP (9)
         '''
         if (method == 1):
             fit_coeffs = sp.optimize.minimize(f, self.baseline_coeffs, method='Powell')        
@@ -98,11 +98,11 @@ class DecisionLandscapeGenerator:
         opt_results.columns= ['error', 'nfev'] + self.param_names
         return opt_results
     
-    def get_model_dl(self, model, coeffs):
+    def get_model_dl(self, params):
         x_grid = np.linspace(self.x_lim[0], self.x_lim[1], self.n_cells+1)
         y_grid = np.linspace(self.y_lim[0], self.y_lim[1], self.n_cells+1)
         X, Y = np.meshgrid((x_grid[:-1]+x_grid[1:])/2.0, (y_grid[:-1]+y_grid[1:])/2.0, 
-                           indexing='xy')        
-        dl = model.V(X, Y, coeffs)/coeffs[0]
+                           indexing='xy')
+        dl = self.model.V(X, Y, params)/params[0]
         
         return x_grid, y_grid, dl

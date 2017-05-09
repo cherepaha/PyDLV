@@ -3,28 +3,19 @@ import numpy as np
 
 #TODO: separate reading and pre-processing of the data
 class DataReader:
-    n_steps = 50
-    lowHighTrials = [12, 15, 25]
-
-    def get_processed_data(self):
-        '''
-        The input trajectories are assumed to be time-normalised, augmented by mouse x- and 
-        y-velocities, and presented in a 'long' dataframe format. It should contain the following 
-        columns (in any order): subj_id, trial_no, t, x, y, vx, vy, chng_mind, xflip_count.
-        t, x, y, vx and vy columns are: time, mouse x- and y- coordinates, mouse x- and y- velocities
-        chng_mind is Boolean column indicating whether the trajectory has change-of-mind or not
-        xflip_count indicates the number of changes of sign of mouse x-velocity
-        '''
-        data = pd.read_csv('../../data/processed_data_high_low.csv', sep=',', header=0)
-        data.set_index(['subj_id', 'trial_no'], inplace=True)
-        data = data[(data.xflip_count < 4) & (data.chng_mind == False)]    
-        data['high_chosen'] = data.outcome != 5
     
-        return data
+    '''
+    The input trajectories are assumed to be time-normalised, augmented by mouse x- and 
+    y-velocities, and presented in a 'long' dataframe format. It should contain the following 
+    columns (in any order): subj_id, trial_no, t, x, y, vx, vy, chng_mind, xflip_count.
+    t, x, y, vx and vy columns are: time, mouse x- and y- coordinates, mouse x- and y- velocities
+    chng_mind is Boolean column indicating whether the trajectory has change-of-mind or not
+    xflip_count indicates the number of changes of sign of mouse x-velocity
+    '''
     
-    def read_raw_data(self):
-        dynamicsPath = '../../data/pod_traj_inc3.txt'
-        choicesPath = '../../data/pod_choice_inc3.txt'
+    def read_data(self, path):
+        dynamicsPath = path + '/pod_traj_inc3.txt'
+        choicesPath = path + '/pod_choice_inc3.txt'
         
         dynamics = pd.read_csv(dynamicsPath, sep=' ', 
             names=['subj_id', 'trial_no', 't', 'x', 'y'],
@@ -34,31 +25,46 @@ class DataReader:
         choices = pd.read_csv(choicesPath, sep=' ', 
             names=['subj_id', 'trial_no', 'rewards_sum', 'symbol', 'outcome', 'resp_time'], 
             header=None)
-        choices.set_index(['subj_id', 'trial_no'], inplace=True)
-
+        choices.set_index(['subj_id', 'trial_no'], inplace=True, drop=True)
+        
         data = pd.merge(dynamics, choices, left_index=True, right_index=True)
         data = data.groupby(level='subj_id').apply(self.add_exp_type)
-        return data
+        # high_chosen is False for a given trial if 'low' option was chosen 
+        # and True if 'high' was chosen
+        data.loc[:,'high_chosen'] = (data.outcome != 5)
         
+        return data
+    
     def add_exp_type(self, data):
         # exp_type contains the high-value choice (7, 10, or 20) 
         # for each trajectory (including 'low-low' ones)
         data['exp_type'] = data.rewards_sum.max()/2
-        return data        
-    
-    def preprocess_data(self, data, exp_type=None, rewards_sum=None, trial_nos=None):
+        return data    
+        
+    def get_processed_data(self, path):
+        data = pd.read_csv(path, sep=',', header=0)
+        data.set_index(['subj_id', 'trial_no'], inplace=True, drop=False)
+        data = data[(data.xflip_count < 4) & (data.chng_mind == False)]  
+
+        # Partition the trials into three blocks, so that trials 1 to 12 belong to Block 1, etc.
+        data.loc[:, 'block_no'] = pd.cut(data.trial_no, bins=np.linspace(0, 36, 4), 
+                                    labels=[1, 2, 3], right=True)
+        return data
+            
+    def preprocess_data(self, data, exp_type=None, rewards_sum=None):
+        # exclude subjects with problematic data
+        data = data.drop([2302, 3217], level = 'subj_id') 
+                
         # Trim the dataset to specific condition (7/5, 10/5, etc.)
         # If needed, trial number can be filtered at this stage as well (e.g., last third of trials)
         if exp_type !=None:
             data = data.loc[data['exp_type'].isin(exp_type)]
         if rewards_sum !=None:
             data = data.loc[data['rewards_sum'].isin(rewards_sum)]
-        if trial_nos != None:
-            data = data.loc[(data['trial_no']>=trial_nos[0]) & (data['trial_no']<=trial_nos[1])]
-        
+                            
         # Move starting point to 0 and invert y axis, then rescale trajectories to (-1,1) x (0,1)
         startingPoints = data.groupby(level=['subj_id', 'trial_no']).first()
-        data.x -= startingPoints.mean(axis = 0).x
+        data.x = data.x - startingPoints.mean(axis = 0).x
         data.y = startingPoints.mean(axis = 0).y - data.y
         data = self.rescale_trajectories(data)
         
@@ -71,7 +77,7 @@ class DataReader:
             apply(lambda df: df.ix[:-1])
         
         # shift time to the timeframe beginning at 0 for each trajectory
-        data.t = data.t.groupby(level=['subj_id', 'trial_no']).apply(lambda t: (t-t.min()))
+        data.loc[:, 't'] = data.t.groupby(level=['subj_id', 'trial_no']).apply(lambda t: (t-t.min()))
 
         data['resp_time'] = data['resp_time']/1000.0
         data['motion_time'] = data.t.groupby(level=['subj_id', 'trial_no']).max()
@@ -86,9 +92,9 @@ class DataReader:
         data = data.groupby(level=['subj_id', 'trial_no']).apply(self.shift_starting_point)
         data = data.groupby(level=['subj_id', 'trial_no']).apply(self.get_maxd)
         data = data.groupby(level=['subj_id', 'trial_no']).apply(self.get_chng_mind)
-        
-        return data               
 
+        return data
+        
     def reverse_x(self, trajectory):
         # We need to reverse those 'high-low' trajectories which have 'high' option on the left
         # As the data doesn't explicitly specify the location of the presented options, we have to  
@@ -103,9 +109,9 @@ class DataReader:
                 trajectory.loc[:,'x'] = -trajectory.loc[:,'x']
         return trajectory
         
-    def resample_trajectory(self, trajectory):
+    def resample_trajectory(self, trajectory, n_steps = 50):
         # Make the sampling time intervals regular
-        t_regular = np.linspace(trajectory.t.min(), trajectory.t.max(), self.n_steps+1)
+        t_regular = np.linspace(trajectory.t.min(), trajectory.t.max(), n_steps+1)
         x_interp = np.interp(t_regular, trajectory.t.values, trajectory.x.values)
         y_interp = np.interp(t_regular, trajectory.t.values, trajectory.y.values)
         
