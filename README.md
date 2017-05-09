@@ -15,7 +15,7 @@ How to use
 ------------
 To see DLV's in action, first download the data of O'Hora et al (2013) [here](http://doi.org/10.17605/OSF.IO/AHPV6). Then follow the tutorial notebook `demos/dlv_tutorial.ipynb`. Note that tutorial and other demos are not installed along with the module, so you have to download them separately. Place the tutorial notebook somewhere along the downloaded data, and open the notebook. Adjust the path to the data file, and have fun! 
 
-If you're not familiar with Jupyter Notebooks, here is a good [starting guide](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/index.html) Also, [nbopen](https://github.com/takluyver/nbopen) is much recommended! 
+If you're not familiar with Jupyter Notebooks, here is a good [starting guide](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/index.html). Also, [nbopen](https://github.com/takluyver/nbopen) is much recommended! 
 
 When you're done with tutorial, you can use the scripts in the demos directory as examples. You may also find useful the notebook `demos/rsos_figures.ipynb`, which generates almost all the figures from the paper (with the exception of Figure 3, which was generated manually in PowerPoint).
 
