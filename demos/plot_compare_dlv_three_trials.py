@@ -14,7 +14,7 @@ def plot_surfaces(dlg, params, subj_id, trials, colors):
         x, y, dl = dlg.get_model_dl(params.loc[subj_id, trial_no][2:2+dlg.model.n_params])
         dlp.plot_surface(x, y, dl, color=colors[i], alpha=0.8) 
     dlp.add_legend(colors, trials)
-    plt.savefig('figures/trials_%i_dlv.png' % (subj_id))
+    plt.savefig('figures/trials_%i_dlv.pdf' % (subj_id))
 
 def plot_trajectories(data, subj_id, trials, colors):
     tp = trajectory_plotter.TrajectoryPlotter()
@@ -23,13 +23,13 @@ def plot_trajectories(data, subj_id, trials, colors):
         trial_info = data.loc[subj_id, trial_no].iloc[0][['high_chosen', 'motion_time', 'max_d']]
         print(trial_info)
     tp.add_legend()
-    plt.savefig('figures/trials_%i_traj.png' % (subj_id))
+    plt.savefig('figures/trials_%i_traj.pdf' % (subj_id))
 
 def compare_dlv(subj_id, trials):
     fit_params = pd.read_csv('csv/fit_params_by_trial_method_9.csv', 
                              index_col=['subj_id', 'trial_no'], header=0)
     cmap = cm.viridis
-    colors = [cmap(0.1), cmap(0.35), cmap(0.7)]
+    colors = [cmap(0.7), cmap(0.35), cmap(0.1)]
           
     model = dl_model_3.DLModel3()  
     dlg = dl_generator.DLGenerator(model) 

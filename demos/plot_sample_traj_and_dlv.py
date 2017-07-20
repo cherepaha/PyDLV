@@ -48,7 +48,7 @@ def plot_sample_trajectory(data, subj_id, trial_no):
         ax.add_patch(patch)
         
     ax.set_axis_off()
-    plt.savefig('figures/sample_traj.png')
+    plt.savefig('figures/sample_traj.pdf')
 
 def plot_baseline_landscape_overlay(dlg, data, subj_id, trial_no):  
     dlp = dl_plotter.DLPlotter(elev=55, azim=-65)
@@ -98,7 +98,7 @@ def plot_baseline_landscape_overlay(dlg, data, subj_id, trial_no):
     ax.plot(trajectory.x, trajectory.y, zs=0, zdir='z', color=traj_color, ls='none', 
             alpha=1.0, marker='o', ms=15, markerfacecolor='none', markeredgewidth=2, 
             markeredgecolor=traj_color, label='Mouse trajectory')
-    plt.savefig('figures/baseline_dlv.png')
+    plt.savefig('figures/baseline_dlv.pdf')
 
 model = dl_model_3.DLModel3()
 dlg = dl_generator.DLGenerator(model)    

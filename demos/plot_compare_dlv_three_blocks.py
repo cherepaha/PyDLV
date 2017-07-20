@@ -14,7 +14,7 @@ def plot_surfaces(dlg, fit_params, subj_id, blocks, colors, labels):
         x, y, dl = dlg.get_model_dl(fit_params.loc[subj_id, block_no][2:2+dlg.model.n_params])
         dlp.plot_surface(x, y, dl, color=colors[i], alpha=0.8)
     dlp.add_legend(colors, labels)
-    plt.savefig('figures/blocks_%i_dlv.png' % (subj_id))
+    plt.savefig('figures/blocks_%i_dlv.pdf' % (subj_id))
 
 def plot_trajectories(data, subj_id, blocks, colors, labels):
     tp = trajectory_plotter.TrajectoryPlotter()
@@ -27,7 +27,7 @@ def plot_trajectories(data, subj_id, blocks, colors, labels):
         print('\n %s\n' % (labels[i]))
         print(block_info)      
     tp.add_legend_mean_traj(colors, labels)
-    plt.savefig('figures/blocks_%i_traj.png' % (subj_id))
+    plt.savefig('figures/blocks_%i_traj.pdf' % (subj_id))
 
 def compare_dlv(subj_id, blocks):
     fit_params = pd.read_csv('csv/fit_params_by_block_method_9.csv', 
@@ -35,7 +35,7 @@ def compare_dlv(subj_id, blocks):
     labels = ['Block %i' % (block) for block in blocks]
     
     cmap = cm.viridis
-    colors = [cmap(0.1), cmap(0.35), cmap(0.7)]
+    colors = [cmap(0.7), cmap(0.35), cmap(0.1)]
     
     model = dl_model_3.DLModel3()   
     dlg = dl_generator.DLGenerator(model)

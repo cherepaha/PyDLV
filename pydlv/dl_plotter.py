@@ -37,7 +37,7 @@ class DLPlotter:
         self.ax.view_init(elev, azim) 
         
     def plot_surface(self, x_grid, y_grid, z, cmap=cm.viridis, color=None, scale_z=True, 
-                     view=None, alpha=1.0):
+                     view=None, alpha=1.0, shade=True, linewidth=1, aa=False):
         n_cells=100
         x, y = np.meshgrid((x_grid[1:]+x_grid[:-1])/2, (y_grid[1:]+y_grid[:-1])/2)
         z = np.nan_to_num(z)
@@ -49,11 +49,11 @@ class DLPlotter:
         self.ax.plot([0.], [0.], [0.], marker='o', markersize=15, color='black')
 
         if color is None:
-            self.ax.plot_surface(x, y, z, cmap=cmap, norm=norm, alpha=alpha,
-                             rcount=n_cells, ccount=n_cells, linewidth=1, antialiased=True)
+            self.ax.plot_surface(x, y, z, cmap=cmap, norm=norm, alpha=alpha, shade=shade,
+                             rcount=n_cells, ccount=n_cells, linewidth=linewidth, antialiased=aa)
         else:
-            self.ax.plot_surface(x, y, z, color=color, alpha=alpha, rcount=n_cells, ccount=n_cells, 
-                                 linewidth=0, antialiased=True)
+            self.ax.plot_surface(x, y, z, color=color, alpha=alpha, shade=shade, rcount=n_cells, 
+                                 ccount=n_cells, linewidth=linewidth, antialiased=aa)
         if view == 'top right':
             self.ax.view_init(elev=27, azim=40)
 

@@ -14,7 +14,7 @@ def plot_surfaces(dlg, fit_params, subjects, colors, labels):
         x, y, dl = dlg.get_model_dl(fit_params.loc[subj_id][2:2+dlg.model.n_params])
         dlp.plot_surface(x, y, dl, color=colors[i], alpha=0.8)
     dlp.add_legend(colors, labels)
-    plt.savefig('figures/subjects_%i_%i_dlv.png' % (subjects[0], subjects[1]))
+    plt.savefig('figures/subjects_%i_%i_dlv.pdf' % (subjects[0], subjects[1]))
 
 def plot_trajectories(data, subjects, colors, labels):
     tp = trajectory_plotter.TrajectoryPlotter()
@@ -25,7 +25,7 @@ def plot_trajectories(data, subjects, colors, labels):
         print('\n %s\n' % (labels[i]))
         print(subj_info)      
     tp.add_legend_mean_traj(colors, labels)
-    plt.savefig('figures/subjects_%i_%i_traj.png' % (subjects[0], subjects[1]))
+    plt.savefig('figures/subjects_%i_%i_traj.pdf' % (subjects[0], subjects[1]))
 
 def compare_dlv(subjects):
     fit_params = pd.read_csv('csv/fit_params_by_subject_method_9.csv', 

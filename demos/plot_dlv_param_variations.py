@@ -17,12 +17,12 @@ def plot_dl_variations(dlg, param_names, param_values, colors):
             current_params[i] = param_value
             x_grid, y_grid, dl = dlg.get_model_dl(current_params)
             scale_z = True if n==1 else False
-            dlp.plot_surface(x_grid, y_grid, dl, color = colors[n], alpha=0.7, scale_z=scale_z)
+            dlp.plot_surface(x_grid, y_grid, dl, color=colors[n], alpha=0.7, scale_z=scale_z)
         
         title_format = r'$\%s$' if param_name=='tau' else r'$%s$'
         dlp.ax.set_title(title_format % (param_name), loc='left', fontsize=42)        
         dlp.ax.legend(labels, param_range, fontsize=32)
-        plt.savefig('figures/param_variations_%s.png' % param_name)
+        plt.savefig('figures/param_variations_%s.pdf' % param_name)
             
 model = dl_model_3.DLModel3()
 dlg = dl_generator.DLGenerator(model)    
