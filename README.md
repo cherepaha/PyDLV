@@ -3,7 +3,7 @@ Decision landscapes are visually rich representations of decision making data. A
 
 Dependencies
 -------------
-PyDLV is currently developed in Python 2.7 using the [numpy](https://sourceforge.net/projects/numpy/)/[scipy](https://github.com/scipy/scipy) framework, [pandas](https://github.com/pydata/pandas) is used for data manipulation. Another key dependencies are [matplotlib](https://github.com/matplotlib/matplotlib) and [seaborn](https://github.com/mwaskom/seaborn). The plans are to migrate to Python 3.6 by the end of 2017.
+PyDLV is currently developed in Python 2.7 using the [numpy](https://sourceforge.net/projects/numpy/)/[scipy](https://github.com/scipy/scipy) framework, [pandas](https://github.com/pydata/pandas) is used for data manipulation. Another key dependencies are [matplotlib](https://github.com/matplotlib/matplotlib) and [seaborn](https://github.com/mwaskom/seaborn). The plans are to migrate to Python 3.6 by the end of 2018.
 
 Installation
 ------------
