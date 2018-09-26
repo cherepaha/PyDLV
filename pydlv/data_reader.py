@@ -2,8 +2,7 @@ import pandas as pd
 import numpy as np
 
 #TODO: separate reading and pre-processing of the data
-class DataReader:
-    
+class DataReader:    
     '''
     The input trajectories are assumed to be time-normalised, augmented by mouse x- and 
     y-velocities, and presented in a 'long' dataframe format. It should contain the following 
@@ -28,18 +27,19 @@ class DataReader:
         choices.set_index(['subj_id', 'trial_no'], inplace=True, drop=True)
         
         data = pd.merge(dynamics, choices, left_index=True, right_index=True)
-        data = data.groupby(level='subj_id').apply(self.add_exp_type)
+        
+        # exp_type contains the high-value choice (7, 10, or 20) 
+        # for each trajectory (including 'low-low' ones)
+        data['exp_type'] = data.groupby(level='subj_id').apply(self.get_exp_type)
+        
         # high_chosen is False for a given trial if 'low' option was chosen 
         # and True if 'high' was chosen
         data.loc[:,'high_chosen'] = (data.outcome != 5)
         
         return data
     
-    def add_exp_type(self, data):
-        # exp_type contains the high-value choice (7, 10, or 20) 
-        # for each trajectory (including 'low-low' ones)
-        data['exp_type'] = data.rewards_sum.max()/2
-        return data    
+    def get_exp_type(self, data):
+        return data.rewards_sum.max()/2
         
     def get_processed_data(self, path):
         data = pd.read_csv(path, sep=',', header=0)

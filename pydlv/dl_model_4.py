@@ -16,17 +16,17 @@ class DLModel4(DLModelBase):
         
     def dV_dx(self, x, y, coeffs):
         return (x - 1)*(x + 1)*x + coeffs[1]*y + coeffs[2]*x*y + (coeffs[3]/2)*y**2 + \
-                coeffs[4]*x**2*y + coeffs[5]*x*y**2  + (coeffs[6]/3)*y**3
+                coeffs[4]*x**2*y + (coeffs[5]*2/3)*x*y**2  + (coeffs[6]/3)*y**3
     
     def dV_dy(self, x, y, coeffs):
         return (y - 1)*y + coeffs[1]*x + (coeffs[2]/2)*x**2 + coeffs[3]*x*y + \
-                (coeffs[4]/3)*x**3 + coeffs[5]*x**2*y + coeffs[6]*x*y**2
+                (coeffs[4]/3)*x**3 + (coeffs[5]*2/3)*x**2*y + coeffs[6]*x*y**2
     
     def V(self, x, y, coeffs):
-        V_x = x**4/4  - x**2/2
+        V_x = x**4/4 - x**2/2
         V_y = y**3/3 - y**2/2
         V_xy = coeffs[1]*x*y + (coeffs[2]/2)*x**2*y + (coeffs[3]/2)*x*y**2 + \
-                (coeffs[4]/3)*x**3*y + (coeffs[5]/2)*x**2*y**2  + (coeffs[6]/3)*x*y**3
+                (coeffs[4]/3)*x**3*y + (coeffs[5]/3)*x**2*y**2  + (coeffs[6]/3)*x*y**3
         V = (V_x + V_y + V_xy)
         return V
     
@@ -43,7 +43,7 @@ class DLModel4(DLModelBase):
         de_dc21 = (left_operand[0] * x*y + left_operand[1] * x**2/2).mean()
         de_dc12 = (left_operand[0] * y**2/2 + left_operand[1] * x*y).mean()
         de_dc31 = (left_operand[0] * x**2*y + left_operand[1] * x**3/3).mean()
-        de_dc22 = (left_operand[0] * x*y**2 + left_operand[1] * x**2*y).mean()       
+        de_dc22 = (left_operand[0] * (x*y**2)*2/3 + left_operand[1] * (x**2*y)*2/3).mean()       
         de_dc13 = (left_operand[0] * y**3/3 + left_operand[1] * x*y**2).mean()
         
         return np.array([de_dtau, de_dc11, de_dc21, de_dc12, de_dc31, de_dc22, de_dc13])
