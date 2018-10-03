@@ -1,6 +1,8 @@
 # [PyDLV - decision landscape visualisation toolbox](https://github.com/cherepaha/PyDLV)
 Decision landscapes are visually rich representations of decision making data. Any experimental data on mouse/hand tracking can potentially benefit from decision landscape visualisations (DLV). 
 
+![alt text](http://rsos.royalsocietypublishing.org/content/royopensci/4/11/170482/F2.large.jpg "Decision landscape")
+
 Dependencies
 -------------
 PyDLV is currently developed in Python 2.7 using the [numpy](https://sourceforge.net/projects/numpy/)/[scipy](https://github.com/scipy/scipy) framework, [pandas](https://github.com/pydata/pandas) is used for data manipulation. Another key dependencies are [matplotlib](https://github.com/matplotlib/matplotlib) and [seaborn](https://github.com/mwaskom/seaborn). The plans are to migrate to Python 3.6 by the end of 2018.
