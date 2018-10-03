@@ -19,7 +19,7 @@ To see DLV's in action, first download the data of O'Hora et al (2013) [here](ht
 
 If you're not familiar with Jupyter Notebooks, here is a good [starting guide](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/index.html). Also, [nbopen](https://github.com/takluyver/nbopen) is much recommended! 
 
-When you're done with tutorial, you can use the scripts in the demos directory as examples. You may also find useful the notebook `demos/paper_figures.ipynb`, which generates almost all the figures from the paper (with the exception of Figure 3, which was generated manually in PowerPoint).
+When you're done with tutorial, you can use the scripts in the demos directory as examples. You may also find useful the [notebook with the figures from the paper](https://github.com/cherepaha/PyDLV/blob/master/demos/paper_figures.ipynb).
 
 The project is currently in active development, stay tuned for updates!
 
