@@ -1,5 +1,5 @@
 # [PyDLV - decision landscape visualisation toolbox](https://github.com/cherepaha/PyDLV)
-Decision landscapes are visually rich representations of decision making data. Any experimental data on mouse/hand tracking can potentially benefit from decision landscape visualisations (DLV). 
+Decision landscapes are visually rich representations of decision making data. Any experimental data on mouse/hand tracking can potentially benefit from decision landscape visualisations (DLV).  
 
 ![alt text](http://rsos.royalsocietypublishing.org/content/royopensci/4/11/170482/F2.large.jpg "Decision landscape")
 
@@ -22,3 +22,9 @@ If you're not familiar with Jupyter Notebooks, here is a good [starting guide](h
 When you're done with tutorial, you can use the scripts in the demos directory as examples. You may also find useful the notebook `demos/paper_figures.ipynb`, which generates almost all the figures from the paper (with the exception of Figure 3, which was generated manually in PowerPoint).
 
 The project is currently in active development, stay tuned for updates!
+
+How to cite
+------------
+The paper reporting the method is publised in Royal Society Open Science: http://rsos.royalsocietypublishing.org/content/4/11/170482
+
+* "Decision landscapes: visualizing mouse-tracking data" A. Zgonnikov, A. Aleni, P. T. Piiroinen, D. O'Hora, M. di Bernardo, R. Soc. open sci. 2017 4 170482; DOI: 10.1098/rsos.170482, 8 November 2017 
