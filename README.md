@@ -15,7 +15,7 @@ To install, clone the repository and run
 
 How to use
 ------------
-To see DLV's in action, first download the data of O'Hora et al (2013) [here](http://doi.org/10.17605/OSF.IO/AHPV6). Then follow the tutorial notebook `demos/dlv_tutorial.ipynb`. Note that tutorial and other demos are not installed along with the module, so you have to download them separately. Place the tutorial notebook somewhere along the downloaded data, and open the notebook. Adjust the path to the data file, and have fun! 
+To see DLV's in action, first download the data of O'Hora et al (2013) [here](http://doi.org/10.17605/OSF.IO/AHPV6). Then follow the [tutorial notebook](https://github.com/cherepaha/PyDLV/blob/master/demos/dlv_tutorial.ipynb). Note that tutorial and other demos are not installed along with the module, so you have to download them separately. Place the tutorial notebook somewhere along the downloaded data, and open the notebook. Adjust the path to the data file, and have fun! 
 
 If you're not familiar with Jupyter Notebooks, here is a good [starting guide](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/index.html). Also, [nbopen](https://github.com/takluyver/nbopen) is much recommended! 
 
