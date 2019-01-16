@@ -4,7 +4,7 @@ from pydlv import data_reader, derivative_calculator
 dr = data_reader.DataReader()
 dc = derivative_calculator.DerivativeCalculator()
 
-data = dr.read_data(path='../../../data')
+data = dr.read_data(path='../../../../data/scirep_locdyn')
 data = dr.preprocess_data(data, rewards_sum = [12, 15, 25])
 
 data = dc.append_derivatives(data)

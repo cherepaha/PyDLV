@@ -1,5 +1,5 @@
 import numpy as np
-from dl_model_base import DLModelBase
+from pydlv.dl_model_base import DLModelBase
 
 class DLModel3(DLModelBase):
     '''
