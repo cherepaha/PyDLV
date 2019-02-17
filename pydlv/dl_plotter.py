@@ -1,4 +1,3 @@
-import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -19,7 +18,6 @@ class DLPlotter:
     lw=2.0
     
     def __init__(self, elev=27, azim=130, ax=None):  
-        sns.set_style('white')
         if ax is None:
             fig = plt.figure(figsize=self.figsize, tight_layout=True)
             self.ax = fig.gca(projection='3d')

@@ -27,15 +27,15 @@ class DLModelBase(object):
         model_vx, model_vy = self.model([trajectory.x.values, trajectory.y.values], 0, coeffs)
         return ((model_vx - trajectory.vx.values)**2 + (model_vy - trajectory.vy.values)**2).mean()
     
-    def model_error_multiple_traj(self, coeffs, trajectories):
+    def model_error_multiple_traj(self, coeffs, trajectories, index_cols):
         # defines fit error of the model with respect to multiple trajectories
         single_traj_error = lambda trajectory: self.model_error(coeffs, trajectory)
-        return trajectories.groupby(level='trial_no').apply(single_traj_error).mean()
+        return trajectories.groupby(by=index_cols).apply(single_traj_error).mean()
         
-    def model_error_jac_multiple_traj(self, coeffs, trajectories):
+    def model_error_jac_multiple_traj(self, coeffs, trajectories, index_cols):
         # jacobian of the fit error with respect to multiple trajectories
         single_traj_error_jac = lambda trajectory: self.model_error_jac(coeffs, trajectory)
-        return trajectories.groupby(level = 'trial_no').apply(single_traj_error_jac).mean()
+        return trajectories.groupby(by=index_cols).apply(single_traj_error_jac).mean()
         
     def integrate_model_ode(self, coeffs, ic, time_grid):
         model = lambda z, t: self.model(z, t, coeffs)

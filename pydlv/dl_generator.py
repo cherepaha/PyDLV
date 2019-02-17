@@ -30,14 +30,14 @@ class DLGenerator:
             
         return self.dlg_minimize(f, f_jac, method)
     
-    def fit_dl_mult_traj(self, trajectories, method=9):
+    def fit_dl_mult_traj(self, trajectories, method=9, index_cols=['trial_no']):
         '''
         trajectories: long dataframe containing t, x, y, vx, vy for each time step 
         for each trajectory
         '''
 #        print(trajectories.iloc[1].name)
-        f = lambda coeffs: self.model.model_error_multiple_traj(coeffs, trajectories)
-        f_jac = lambda coeffs: self.model.model_error_jac_multiple_traj(coeffs, trajectories)
+        f = lambda coeffs: self.model.model_error_multiple_traj(coeffs, trajectories, index_cols)
+        f_jac = lambda coeffs: self.model.model_error_jac_multiple_traj(coeffs, trajectories, index_cols)
                     
         return self.dlg_minimize(f, f_jac, method)
     
