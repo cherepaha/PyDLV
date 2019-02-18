@@ -35,7 +35,7 @@ class DLPlotter:
         self.ax.view_init(elev, azim) 
         
     def plot_surface(self, x_grid, y_grid, z, cmap=cm.viridis, color=None, scale_z=True, 
-                     view=None, alpha=1.0, shade=False, linewidth=0.1, aa=True):
+                     view=None, alpha=1.0, shade=False, linewidth=0.1, aa=True, plot_marble=True):
         n_cells=100
         x, y = np.meshgrid((x_grid[1:]+x_grid[:-1])/2, (y_grid[1:]+y_grid[:-1])/2)
         z = np.nan_to_num(z)
@@ -43,8 +43,8 @@ class DLPlotter:
             self.ax.set_zlim([np.min(z), 0])
         norm = mpl.colors.Normalize(vmin=np.min(z), vmax=0, clip=False)
         
-        # plot the marble
-        self.ax.plot([0.], [0.], [0.], marker='o', markersize=15, color='black')
+        if plot_marble:
+            self.ax.plot([0.], [0.], [0.], marker='o', markersize=15, color='black')
 
         if color is None:
             self.ax.plot_surface(x, y, z, cmap=cmap, norm=norm, alpha=alpha, shade=shade,
