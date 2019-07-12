@@ -30,7 +30,8 @@ class DataReader:
         
         # exp_type contains the high-value choice (7, 10, or 20) 
         # for each trajectory (including 'low-low' ones)
-        data['exp_type'] = data.groupby(level='subj_id').apply(self.get_exp_type)
+        data = data.join(data.groupby(level='subj_id').apply(self.get_exp_type).rename('exp_type'), 
+                         on='subj_id') 
         
         # high_chosen is False for a given trial if 'low' option was chosen 
         # and True if 'high' was chosen
@@ -43,7 +44,6 @@ class DataReader:
         
     def get_processed_data(self, path):
         data = pd.read_csv(path, sep=',', header=0)
-        data.set_index(['subj_id', 'trial_no'], inplace=True, drop=False)
         data = data[(data.xflip_count < 4) & (data.chng_mind == False)]  
 
         # Partition the trials into three blocks, so that trials 1 to 12 belong to Block 1, etc.
@@ -53,7 +53,7 @@ class DataReader:
             
     def preprocess_data(self, data, exp_type=None, rewards_sum=None):
         # exclude subjects with problematic data
-        data = data.drop([2302, 3217], level = 'subj_id') 
+        data = data.drop([2302, 3217], level='subj_id') 
                 
         # Trim the dataset to specific condition (7/5, 10/5, etc.)
         # If needed, trial number can be filtered at this stage as well (e.g., last third of trials)
@@ -117,8 +117,12 @@ class DataReader:
         
         traj_interp = pd.DataFrame([t_regular, x_interp, y_interp]).transpose()
         traj_interp.columns = ['t', 'x', 'y']
+        
+        # appending extra data from the original trajectory
         for column in trajectory.columns[3:]:
-            traj_interp[column] = trajectory[column].ix[0]
+#            print(trajectory[column])
+#            print(trajectory[column].iloc[0])
+            traj_interp[column] = trajectory[column].iloc[0]
         return traj_interp
         
     def get_chng_mind(self, trajectory, threshold = 0.25):

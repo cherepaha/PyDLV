@@ -29,18 +29,18 @@ def get_fit_parameters(data, methods=[9], by='subject', csv_path='csv'):
         print('By %s, method %i' % (by, method))
         if by == 'trial':
             fit_dl = lambda traj: dlg.fit_dl_single_traj(traj, method)
-            params = data.groupby(level = ['subj_id', 'trial_no']).apply(fit_dl)
-            params.index = params.index.droplevel(2)
+            params = data.groupby(by=['subj_id', 'trial_no']).apply(fit_dl)
+            params.index = params.index.droplevel(-1)
 
         elif by == 'block':
             fit_dl = lambda trajs: dlg.fit_dl_mult_traj(trajs, method)        
             params = data.groupby(by=['subj_id', 'block_no']).apply(fit_dl)
-            params.index = params.index.droplevel(2)
+            params.index = params.index.droplevel(-1)
             
         elif by == 'subject':
             fit_dl = lambda trajs: dlg.fit_dl_mult_traj(trajs,  method)    
-            params = data.groupby(level='subj_id').apply(fit_dl)
-            params.index = params.index.droplevel(1)
+            params = data.groupby(by='subj_id').apply(fit_dl)
+            params.index = params.index.droplevel(-1)
             
         print('By %s, method %i, median error %f' % (by, method, params.error.median()))
         

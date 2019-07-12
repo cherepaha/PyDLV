@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib import cm
-import data_analyser
+from pydlv import data_analyser
 
 class TrajectoryPlotter:
     x_lim = [-1.35, 1.35]
@@ -37,11 +37,12 @@ class TrajectoryPlotter:
         
     def plot_mean_trajectories(self, trajectories, color, label):
         # plots all provided trajectories and two mean trajectories, for 'high' and 'low' choices
-        for idx, trajectory in trajectories.groupby(level='trial_no'):
+        for idx, trajectory in trajectories.groupby(by='trial_no'):
             self.plot_trajectory(trajectory, color, label, marker='None', lw=self.lw, alpha=0.5)
         
         da = data_analyser.DataAnalyser()
-        mean_trajectories = da.get_mean_trajectories(trajectories)
+        mean_trajectories = da.get_mean_trajectories(trajectories, by=['high_chosen'], 
+                                                     index_cols=['subj_id', 'trial_no'])
         for condition in mean_trajectories.index.get_level_values(0).unique():
             x = mean_trajectories.loc[condition].x.values
             y = mean_trajectories.loc[condition].y.values

@@ -9,12 +9,14 @@ from scipy import interpolate
 import numpy as np
 
 def get_choice_patches():
-    screen_patch = mpl_patches.Rectangle((-1.1, -0.1), 2.2, 1.3, fill=False, lw=3)
+    screen_patch = mpl_patches.Rectangle((-1.1, -0.1), 2.2, 1.3, fill=False, lw=3, 
+                                         edgecolor='black')
     left_patch = mpl_patches.Rectangle((-1.05, 0.85), 0.3, 0.3, fill=True, lw=1, 
                                    facecolor='white', edgecolor='black', alpha=0.2)
     right_patch = mpl_patches.Rectangle((0.75, 0.85), 0.3, 0.3, fill=True, lw=1, 
                                    facecolor='white', edgecolor='black', alpha=0.2)
-    left_text = mpl_patches.PathPatch(TextPath((-1.0, 0.9), 'A', size=0.3, backgroundcolor='white'))
+    left_text = mpl_patches.PathPatch(TextPath((-1.0, 0.9), 'A', size=0.3, 
+                                               backgroundcolor='white'))
     right_text = mpl_patches.PathPatch(TextPath((0.8, 0.9), 'B', size=0.3))
     
     return screen_patch, left_patch, right_patch, left_text, right_text
@@ -37,7 +39,7 @@ def plot_sample_trajectory(data, subj_id, trial_no):
     
     traj_color = cm.viridis(0.1)
 
-    trajectory = data.loc[subj_id, trial_no]    
+    trajectory = data[(data.subj_id==subj_id) & (data.trial_no==trial_no)]
     ax.plot(trajectory.x, trajectory.y, color=traj_color, ls='none', marker='o', ms=15,
             markerfacecolor='none', markeredgewidth=2, markeredgecolor=traj_color, 
             label='Mouse trajectory')
@@ -73,7 +75,7 @@ def plot_baseline_landscape_overlay(dlg, data, subj_id, trial_no):
     
     cmap = cm.viridis
     traj_color = cmap(0.1)    
-    trajectory = data.loc[subj_id, trial_no]
+    trajectory = data[(data.subj_id==subj_id) & (data.trial_no==trial_no)]
     z = f(trajectory.x.values, trajectory.y.values)
     if trajectory.x.values[-1]>0:
         z= np.diag(z)
@@ -87,7 +89,7 @@ def plot_baseline_landscape_overlay(dlg, data, subj_id, trial_no):
     ax.plot([0.], [0.], [0.], marker='o', markersize=15, color = 'black', alpha=0.7)
     ax.plot([trajectory.x.values[-1]], [trajectory.y.values[-1]], [z[-1]], 
             marker='o', markersize=15, color='black', alpha=0.7)
-    
+#    
     # draw screen above the surface and choice options on it
     patches = get_choice_patches()
     for patch in patches:

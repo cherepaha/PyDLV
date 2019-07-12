@@ -20,12 +20,12 @@ def plot_trajectories(data, subj_id, blocks, colors, labels):
     tp = trajectory_plotter.TrajectoryPlotter()
     
     for i, block_no in enumerate(blocks):
-        block_trajectories = data[data.block_no==block_no].loc[subj_id]
+        block_trajectories = data[(data.subj_id==subj_id) & (data.block_no==block_no)]
         tp.plot_mean_trajectories(block_trajectories, colors[i], labels[i])
-        block_info = block_trajectories[['high_chosen', 'motion_time', 'max_d']].\
-                        groupby(level='trial_no').first().groupby('high_chosen').mean()
+        block_info = block_trajectories.groupby('trial_no').first().groupby('high_chosen') \
+                .mean()[['motion_time', 'max_d']]
         print('\n %s\n' % (labels[i]))
-        print(block_info)      
+        print(block_info)
     tp.add_legend_mean_traj(colors, labels)
     plt.savefig('figures/blocks_%i_traj.pdf' % (subj_id))
 
@@ -47,6 +47,7 @@ def compare_dlv(subj_id, blocks):
     
     da = data_analyser.DataAnalyser()
     stats = da.get_block_stats(data)
+    print('\n %s\n' % ('Block stats'))
     print(stats.loc[subj_id])
     
 #subj_id = 233

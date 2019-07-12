@@ -24,20 +24,19 @@ class DLGenerator:
         '''
         trajectory: long dataframe containing t, x, y, vx, vy for each time step       
         '''
-#        print(trajectory.iloc[1].name)
         f = lambda coeffs: self.model.model_error(coeffs, trajectory)
         f_jac = lambda coeffs: self.model.model_error_jac(coeffs, trajectory)
             
         return self.dlg_minimize(f, f_jac, method)
     
-    def fit_dl_mult_traj(self, trajectories, method=9, index_cols=['trial_no']):
+    def fit_dl_mult_traj(self, trajectories, method=9, groupby_cols=['trial_no']):
         '''
         trajectories: long dataframe containing t, x, y, vx, vy for each time step 
         for each trajectory
         '''
-#        print(trajectories.iloc[1].name)
-        f = lambda coeffs: self.model.model_error_multiple_traj(coeffs, trajectories, index_cols)
-        f_jac = lambda coeffs: self.model.model_error_jac_multiple_traj(coeffs, trajectories, index_cols)
+        f = lambda coeffs: self.model.model_error_multiple_traj(coeffs, trajectories, groupby_cols)
+        f_jac = lambda coeffs: self.model.model_error_jac_multiple_traj(coeffs, trajectories, 
+                                                                        groupby_cols)
                     
         return self.dlg_minimize(f, f_jac, method)
     
@@ -49,44 +48,35 @@ class DLGenerator:
         '''
         if (method == 1):
             fit_coeffs = sp.optimize.minimize(f, self.baseline_coeffs, method='Powell')        
-
-        if (method == 2):
+        elif (method == 2):
             fit_coeffs = sp.optimize.minimize(f, self.baseline_coeffs, method='Nelder-Mead')        
-
-        if (method == 3):
+        elif (method == 3):
             fit_coeffs = sp.optimize.minimize(f, self.baseline_coeffs, method='CG', jac=f_jac)
-
-        if (method == 4):
-            fit_coeffs = sp.optimize.minimize(f, self.baseline_coeffs, method='BFGS', jac=f_jac)
-        
-        if (method == 5):
+        elif (method == 4):
+            fit_coeffs = sp.optimize.minimize(f, self.baseline_coeffs, method='BFGS', jac=f_jac)        
+        elif (method == 5):
             fit_coeffs = sp.optimize.minimize(f, self.baseline_coeffs, method='Newton-CG', 
                                               jac=f_jac)
-
-        if (method == 6):
+        elif (method == 6):
             fit_coeffs = sp.optimize.minimize(f, self.baseline_coeffs, method='L-BFGS-B',
                                               bounds=self.param_boundaries, jac=f_jac)
-
-        if (method == 7):
+        elif (method == 7):
             fit_coeffs = sp.optimize.minimize(f, self.baseline_coeffs, method='TNC',
                                               bounds=self.param_boundaries, jac=f_jac)
-                                          
-        if (method == 8):
+        elif (method == 8):
             fit_coeffs = sp.optimize.minimize(f, self.baseline_coeffs, method='COBYLA',
                                               bounds=self.param_boundaries, jac=f_jac)
-        
-        if (method == 9):
+        elif (method == 9):
             fit_coeffs = sp.optimize.minimize(f, self.baseline_coeffs, method='SLSQP',
                                               bounds=self.param_boundaries, jac=f_jac)
-
-        if (method == 10):
+        elif (method == 10):
             fit_coeffs = sp.optimize.differential_evolution(f, polish = True, mutation=(1.0, 1.5), 
                                                             bounds=self.param_boundaries)                
-        if (method == 11):
+        elif (method == 11):
             minimizer_kwargs = {'method': 'Powell'}
             fit_coeffs = sp.optimize.basinhopping(f, self.baseline_coeffs, niter=200,
                                                   minimizer_kwargs=minimizer_kwargs)
-        if (method == 12):
+        elif (method == 12):
             minimizer_kwargs = {'method': 'CG', 'jac': True}
             f_with_jac = lambda coeffs: [f(coeffs), f_jac(coeffs)]
             fit_coeffs = sp.optimize.basinhopping(f_with_jac, self.baseline_coeffs, niter=200,

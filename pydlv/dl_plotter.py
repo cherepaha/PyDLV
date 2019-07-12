@@ -19,8 +19,9 @@ class DLPlotter:
     
     def __init__(self, elev=27, azim=130, ax=None):  
         if ax is None:
-            fig = plt.figure(figsize=self.figsize, tight_layout=True)
-            self.ax = fig.gca(projection='3d')
+            fig = plt.figure(figsize=self.figsize)
+            self.ax = fig.add_subplot(111, projection='3d')
+#            self.ax = fig.gca(projection='3d')
         else:
             self.ax = ax
         self.set_axis_params(elev, azim)

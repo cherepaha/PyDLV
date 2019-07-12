@@ -19,9 +19,10 @@ def plot_surfaces(dlg, fit_params, subjects, colors, labels):
 def plot_trajectories(data, subjects, colors, labels):
     tp = trajectory_plotter.TrajectoryPlotter()
     for i, subj_id in enumerate(subjects):
-        tp.plot_mean_trajectories(data.loc[subj_id], colors[i], labels[i])
-        subj_info = data.loc[subj_id, ['high_chosen', 'motion_time', 'max_d']].\
-                        groupby(level='trial_no').first().groupby('high_chosen').mean()
+        subj_trajectories = data[(data.subj_id==subj_id)]
+        tp.plot_mean_trajectories(subj_trajectories, colors[i], labels[i])
+        subj_info = subj_trajectories.groupby('trial_no').first().groupby('high_chosen') \
+                .mean()[['motion_time', 'max_d']]
         print('\n %s\n' % (labels[i]))
         print(subj_info)      
     tp.add_legend_mean_traj(colors, labels)
@@ -45,6 +46,7 @@ def compare_dlv(subjects):
     
     da = data_analyser.DataAnalyser()
     stats = da.get_subjects_stats(data)
+    print('\n %s\n' % ('Subject stats'))
     print(stats.loc[subjects])
 
 compare_dlv(subjects=[9276, 9424])

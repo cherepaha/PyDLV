@@ -19,9 +19,9 @@ def plot_surfaces(dlg, params, subj_id, trials, colors):
 def plot_trajectories(data, subj_id, trials, colors):
     tp = trajectory_plotter.TrajectoryPlotter()
     for i, trial_no in enumerate(trials):
-        tp.plot_trajectory(data.loc[subj_id, trial_no], color=colors[i], label=trial_no)
-        trial_info = data.loc[subj_id, trial_no].iloc[0][['high_chosen', 'motion_time', 'max_d']]
-        print(trial_info)
+        trial_data = data[(data.subj_id==subj_id) & (data.trial_no==trial_no)]
+        tp.plot_trajectory(trial_data, color=colors[i], label=trial_no)
+        print(trial_data .iloc[0][['high_chosen', 'motion_time', 'max_d']])
     tp.add_legend()
     plt.savefig('figures/trials_%i_traj.pdf' % (subj_id))
 
